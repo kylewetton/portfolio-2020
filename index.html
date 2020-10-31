@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Kyle Wetton – Senior Front-End Developer</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/bundle.css">
+    <meta name="description" content="A senior front-end developer based in Auckland, New Zealand with a strong background in both digital development and modern design.">
+</head>
+
+<body>
+    <div id="js-animated-panel" class="animated-panel">
+        <div id="anim-0" class="hidden absolute inset-0"></div>
+        <div id="anim-1" class="hidden absolute inset-0"></div>
+        <div id="anim-2" class="hidden absolute inset-0"></div>
+    </div>
+
+    <main class="flex flex-col lg:flex-row h-screen max-w-full"> 
+        
+        <div class="sidebar">
+            <a href="/" data-href="home" class="navigate h-12 w-12 rounded-full flex justify-center items-center">
+                <img class="w-full h-full" src="/assets/k-logo.svg" alt="Kyle Wetton">
+            </a>
+            <ul class="text-white flex lg:block nav">
+                <li class="flex justify-center"><a href="/projects" data-href="projects" class="navigate transition-colors duration-200 text-xs writing-lr">Projects</a></li>
+                <li class="flex justify-center"><a href="/about-me" data-href="about-me" class="navigate transition-colors duration-200 text-xs writing-lr mx-8 lg:mx-0 lg:my-8">About me</a></li>
+                <li class="flex justify-center"><a href="#" id="js-toggle-contact" class="text-xs writing-lr">Contact me</a></li>
+            </ul>
+            <div>
+                <a href="https://github.com/kylewetton?tab=repositories&q=&type=public&language=javascript" target="_blank" rel="noreferrer">
+                    <span class="jam jam-github-circle text-gray-500 text-3xl hover:text-gold transition duration-200"></span>
+                </a>
+
+            </div>
+        </div>
+        <div class="sidebar-ghost lg:py-12 flex-shrink-0 h-24 lg:h-auto lg:w-24"></div>
+
+        <div id="content" class="loaded flex-1"></div>
+    </main>    
+
+    <div id="js-contact" class="contact overflow-hidden off-canvas z-50">
+        <div class="flex items-center justify-between text-xs md:text-sm leading-none bg-charcoal-900 p-2 rounded-t-sm">
+            <p class="text-white">Contact me via phone or email 👋</p>
+            <p class="flex items-center text-blue-500"><span class="jam jam-phone"></span> <a href="tel:021733682" class="font-bold">021 733 682</a></p>
+        </div>
+        
+        <form action="/" method="POST" id="formPackage" class="form flex flex-col">
+            <div class="flex border-b border-charcoal-900">
+                <input placeholder="Name" class="flex-1 border-r border-charcoal-900" id="fname" type="text" name="name">
+                <input placeholder="Email" class="flex-1" id="femail" type="email" name="email">
+            </div>
+            <textarea placeholder="What would you like to talk about?" id="fmessage" name="message"></textarea>
+            <div class="contact-controls space-x-2">
+                <button id="js-close-contact" class="close-contact control-button">close</button>
+                <button id="js-send-mail" class="submit-button control-button" type="submit"><span class="jam text-xs mr-1 icon"></span><span class="visually-hidden">Send email</span></button>
+            </div>
+            
+        </form>    
+    </div>
+    
+    <script src="/js/app.js"></script>
+</body>
+
+</html>

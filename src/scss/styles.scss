@@ -1,0 +1,230 @@
+@tailwind base;
+
+@tailwind components;
+
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Roboto:wght@300;400&display=swap');
+@import url('https://unpkg.com/jam-icons/css/jam.min.css');
+
+body {
+    @apply bg-charcoal-900 text-charcoal-900 tracking-wider font-light;
+    font-family: 'Roboto', sans-serif;
+}
+
+button {
+    @apply focus:outline-none;
+}
+
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="button"],
+input[type="submit"] {
+     -webkit-appearance: none;
+     border-radius: 0;
+}
+
+.content {
+    p {
+        @apply mb-6;
+    }
+}
+
+.visually-hidden {
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px; 
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+.serif {
+    @apply font-normal;
+    font-family: 'Prata', serif;
+}
+
+@screen lg {
+    .writing-lr {
+        writing-mode: vertical-lr;
+    }
+
+    .nav {
+        transform: rotateZ(-180deg);
+    }
+}
+
+.btn {
+    @apply text-gold text-sm uppercase tracking-wide;
+    &--icon {
+        @apply flex items-center leading-none;
+        .jam {
+            @apply ml-2 text-gray-700;
+        } 
+    }
+}
+
+.jam {
+    @apply text-xl;
+}
+
+.sidebar {
+    @apply bg-charcoal-900 fixed left-0 inset-x-0 lg:inset-y-0 flex lg:flex-col justify-between z-50 items-center px-4 py-0 lg:px-0 lg:py-24 flex-shrink-0 w-full h-24 lg:h-auto lg:w-24 border-b lg:border-r lg:border-b-0 border-black
+}
+
+.navigate {
+    @apply cursor-pointer;
+    * {
+        @apply pointer-events-none;
+    }
+}
+
+.animated-panel {
+    @apply hidden z-50 w-full h-full inset-0 fixed;
+    svg {
+        @apply object-cover;
+    }
+}
+
+.animated-panel.loading {
+    @apply block;
+}
+
+#content {
+    @apply transform ease-out opacity-0 scale-90;
+}
+
+#content.loaded {
+    @apply opacity-100 scale-100 transition duration-500;
+}
+
+.image-carousel {
+    @apply relative mb-12 lg:mb-0;
+    .slide {
+        @apply absolute w-full h-auto top-0 z-10 opacity-0 transition-opacity duration-500;
+    }
+    .slide.active {
+        @apply relative z-20 opacity-100;
+    }
+}
+
+.project-description {
+    @apply w-auto lg:max-w-xs xl:max-w-md 2xl:max-w-xl;
+}
+
+.slide-load {
+    animation: load 2000ms linear 0ms infinite forwards;
+}
+
+@keyframes load {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.contact {
+    transition: bottom 0.5s cubic-bezier(.22,.45,.1,.96), transform 1s ease-out;
+    @apply fixed z-50 max-w-lg bottom-1rem inset-x-1rem md:bottom-0 md:w-full md:left-auto md:right-0 md:m-20 shadow-2xl rounded-sm;
+    
+    &.off-canvas {
+        bottom: -600px;
+        transform: translateZ(100px) perspective(1000px) rotateY(0deg);
+    }
+
+    input, textarea {
+        @apply bg-gray-200 p-3 text-sm outline-none;
+        &.error {
+            @apply border-b-4 border-red-600;
+        }
+    }
+    textarea {
+        @apply h-40;
+    }
+
+    .contact-controls {
+        @apply z-10 absolute flex mb-3 mr-3 bottom-0 right-0;
+    }
+
+    .control-button {
+        @apply leading-none flex justify-center items-center text-xs uppercase h-6 rounded-full px-2
+    }
+
+    .close-contact {
+        @apply bg-gray-300 text-gray-700;
+    }
+
+    .submit-button {
+        @apply bg-charcoal-900 text-gold;
+        
+        .icon:before {
+            content: "\eb5a";
+        }
+
+        &:after {
+            content: 'send';
+        }
+
+        &.sending {
+            @apply bg-blue-300 text-blue-800 pointer-events-none;
+            .icon {
+                @apply animate-spin;
+            }
+            .icon:before {
+                content: "\eb6f";
+            }
+        }
+        
+        &.sending:after {
+            content: 'sending';
+        }
+
+        &.sent {
+            @apply bg-green-300 text-green-800 pointer-events-none;
+            .icon:before {
+                content: "\e9a7";
+            }
+        }
+        &.sent:after {
+            content: 'done';
+        }
+
+        &.failed {
+            @apply bg-red-300 text-red-800 pointer-events-none;
+            .icon:before {
+                content: "\ea05";
+            }
+        }
+        &.failed:after {
+            content: 'something went wrong, please check fields';
+        }
+        &.server-error {
+            @apply bg-red-300 text-red-800 pointer-events-none;
+            .icon:before {
+                content: "\ea05";
+            }
+        }
+        &.server-error:after {
+            content: 'Yikes, service is down, email me at hello@kwetton.dev';
+        }
+
+        .jam {
+            @apply text-xs mr-1;
+        }
+    }
+    
+}
+
+.brand-logo {
+    @apply transition-opacity duration-700;
+}
+
+@screen md {
+    .contact {
+        transform: translateZ(1000px) perspective(1000px) rotateY(-17deg);
+    }
+}
+
+@tailwind utilities;
