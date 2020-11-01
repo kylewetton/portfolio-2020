@@ -4,13 +4,14 @@ import lottie from 'lottie-web-light';
  * These three small packages are written by me,
  * specifically for this project
  */
+import ScrollSniffer from 'scroll-sniffer';
 import TinyCarousel from './tiny-carousel';
-import ScrollSniffer from "scroll-sniffer";
 import Vidya from './vidya';
 /** ------------------------------------ */
 
 const contentSection = document.querySelector('#content');
-let portrait, portraitBackground, carousels, vidyas;
+let portrait; let portraitBackground; let carousels; let
+  vidyas;
 
 const isTouchDevice = () => 'ontouchstart' in window;
 
@@ -18,8 +19,8 @@ const navs = document.querySelectorAll('.navigate');
 
 const highlightNav = () => {
   const page = window.location.pathname.split('/')[1];
-  navs.forEach(n => {
-    const {href} = n.dataset;
+  navs.forEach((n) => {
+    const { href } = n.dataset;
     n.classList.remove('text-gold');
     if (href && href === page) {
       n.classList.add('text-gold');
@@ -28,7 +29,6 @@ const highlightNav = () => {
 };
 
 function init() {
-
   portrait = document.querySelector('#js-portrait');
   portraitBackground = document.querySelector('#js-portrait-background');
 
@@ -36,13 +36,13 @@ function init() {
    * Tiny Carousel
    * */
 
-  carousels = [...document.querySelectorAll('.image-carousel')].map(carousel => new TinyCarousel(carousel));
-  vidyas = [...document.querySelectorAll('.vidya')].map(vid => new Vidya(vid));
+  carousels = [...document.querySelectorAll('.image-carousel')].map((carousel) => new TinyCarousel(carousel));
+  vidyas = [...document.querySelectorAll('.vidya')].map((vid) => new Vidya(vid));
 
   /**
    * ScrollSniffer
    */
-  const listener = new ScrollSniffer(".listen");
+  const listener = new ScrollSniffer('.listen');
   listener.listen();
 
   highlightNav();
@@ -51,38 +51,36 @@ function init() {
    * Toggle device text
    */
 
-   const mobileText = document.querySelectorAll('.mobile');
-   const desktopText = document.querySelectorAll('.desktop');
+  const mobileText = document.querySelectorAll('.mobile');
+  const desktopText = document.querySelectorAll('.desktop');
 
-   if (isTouchDevice()) {
-      mobileText.forEach(el => {
-        el.classList.remove('hidden');
+  if (isTouchDevice()) {
+    mobileText.forEach((el) => {
+      el.classList.remove('hidden');
     });
-   } else {
-    desktopText.forEach(el => {
-        el.classList.remove('hidden');
-     });
-   }
+  } else {
+    desktopText.forEach((el) => {
+      el.classList.remove('hidden');
+    });
+  }
 
-   /**
+  /**
     * Fade logos in
     */
 
-    const brandLogos = document.querySelectorAll('.brand-logo');
+  const brandLogos = document.querySelectorAll('.brand-logo');
 
-    if (brandLogos.length) {
-      brandLogos.forEach((logo, index) => {
-        logo.addEventListener('load', () => {
-          const i = index + 1;
-          setTimeout(() => {
-            logo.classList.remove('opacity-0');
-          }, i * 100);
-        });
+  if (brandLogos.length) {
+    brandLogos.forEach((logo, index) => {
+      logo.addEventListener('load', () => {
+        const i = index + 1;
+        setTimeout(() => {
+          logo.classList.remove('opacity-0');
+        }, i * 100);
       });
-    }
-   
+    });
+  }
 } // End init
-
 
 /**
  * Portrait Parallaxing effect
@@ -96,7 +94,7 @@ const calculateCenterAngle = (x, y) => {
   const angleY = Math.floor(100 - (y / centerY * 100));
   return {
     angleX,
-    angleY
+    angleY,
   };
 };
 
@@ -104,12 +102,11 @@ const portraitParallax = (x, y) => {
   const angleTension = 80;
   const {
     angleX,
-    angleY
+    angleY,
   } = calculateCenterAngle(x, y);
   portrait.style.backgroundPosition = `${50 - ((angleX / (angleTension / 2)) * -1)}%`;
   portrait.style.transform = `translateY(${(angleY / (angleTension / 4)) * -1}px) scale(1.01)`;
-  portraitBackground.style.cssText =
-  `transform: perspective(400px)
+  portraitBackground.style.cssText = `transform: perspective(400px)
     rotateX(${angleY / (angleTension * 3)}deg)
     rotateY(${(angleX / (angleTension * 3)) * -1}deg)
     scale(1.02);`;
@@ -118,13 +115,12 @@ const portraitParallax = (x, y) => {
 window.addEventListener('mousemove',
   ({
     clientX,
-    clientY
+    clientY,
   }) => {
     if (portrait && portraitBackground && !isTouchDevice()) {
       portraitParallax(clientX, clientY);
     }
   });
-
 
 /**
  * Mail
@@ -137,7 +133,7 @@ const mailButton = document.querySelector('#js-send-mail');
 
 const toggleContactContainer = () => {
   contactContainer.classList.toggle('off-canvas');
-}
+};
 
 mailButton.addEventListener('click', (e) => sendMail(e));
 
@@ -149,13 +145,13 @@ toggleContactButton.addEventListener('click', (e) => {
 closeContact.addEventListener('click', (e) => {
   e.preventDefault();
   toggleContactContainer();
-})
+});
 
- const fields = {
-   fname: document.querySelector('#fname'),
-   femail: document.querySelector('#femail'),
-   fmessage: document.querySelector('#fmessage')
- }
+const fields = {
+  fname: document.querySelector('#fname'),
+  femail: document.querySelector('#femail'),
+  fmessage: document.querySelector('#fmessage'),
+};
 
 for (const [key, field] of Object.entries(fields)) {
   field.addEventListener('click', () => {
@@ -165,27 +161,26 @@ for (const [key, field] of Object.entries(fields)) {
 }
 
 const updateFormState = (state = '', revert = false) => {
-
   const clear = () => {
     mailButton.classList.remove('sent');
     mailButton.classList.remove('sending');
     mailButton.classList.remove('failed');
-  }
+  };
   clear();
 
-switch(state) {
-    case 'sending' :
+  switch (state) {
+    case 'sending':
       mailButton.classList.add('sending');
-    break;
-    case 'sent' :
+      break;
+    case 'sent':
       mailButton.classList.add('sent');
-    break;
-    case 'failed' :
+      break;
+    case 'failed':
       mailButton.classList.add('failed');
-    break;
-    case 'server-error' :
+      break;
+    case 'server-error':
       mailButton.classList.add('server-error');
-    break;
+      break;
     default:
       clear();
   }
@@ -203,17 +198,17 @@ const mailSuccess = () => {
   setTimeout(() => {
     toggleContactContainer();
     for (const [key, field] of Object.entries(fields)) {
-     field.value = '';
+      field.value = '';
     }
   }, 1000);
-}
+};
 
-const highlightBadFields = ({errors}) => {
-  errors.forEach(error => {
-    const {param} = error;
+const highlightBadFields = ({ errors }) => {
+  errors.forEach((error) => {
+    const { param } = error;
     fields[param].classList.add('error');
   });
-} 
+};
 
 const sendMail = (e) => {
   e.preventDefault();
@@ -227,37 +222,36 @@ const sendMail = (e) => {
 
   const object = {};
   formData.forEach((value, key) => {
-    object[key] = value
+    object[key] = value;
   });
   const json = JSON.stringify(object);
 
   fetch('send-mail', {
-      "method": "post",
-      "mode": "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      "body": json
-    })
-    .then(res => {
+    method: 'post',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: json,
+  })
+    .then((res) => {
       if (res.ok) {
         mailSuccess();
-      } else if (res.status === 503)  {
+      } else if (res.status === 503) {
         updateFormState('server-error', false);
-      }
-      else {
+      } else {
         updateFormState('failed', true);
       }
-     return res;
+      return res;
     })
-    .then(res => res.json())
-    .then(res => {
+    .then((res) => res.json())
+    .then((res) => {
       if (res.errors.length) {
         highlightBadFields(res);
       }
     })
     .catch(console.error);
-  }
+};
 
 /**
  * Page Transitions
@@ -280,37 +274,33 @@ const tracks = animations.map((anim, i) => {
       },
       autoplay: false,
       loop: false,
-      path: `/assets/${anim}.json`
-    })
+      path: `/assets/${anim}.json`,
+    }),
   };
 });
 
 const playAnimation = () => {
-
-  tracks.forEach(track => track.panel.classList.add('hidden'));
+  tracks.forEach((track) => track.panel.classList.add('hidden'));
 
   tracks[cycle].panel.classList.remove('hidden');
   tracks[cycle].animation.goToAndPlay(0, true);
   cycle = cycle < tracks.length - 1 ? cycle + 1 : 0;
 };
 
-
 /**
  * Routing
  */
 
- const cleanPaths = path => path.split('/').filter(p => p !== '').join('/');
-
+const cleanPaths = (path) => path.split('/').filter((p) => p !== '').join('/');
 
 const invokePage = (href, pushState, fireEvents = true) => {
-
   if (fireEvents) document.dispatchEvent(new Event('PageInvokeStart'));
   const delay = fireEvents ? animSpeed : 0;
 
   setTimeout(() => {
     fetch(`/invoke/${href || 'home'}`)
       .then((res) => res.text())
-      .then(html => {
+      .then((html) => {
         contentSection.innerHTML = html;
         if (pushState) {
           window.history.pushState({}, href, `${window.location.origin}/${href && href !== 'home' ? href : ''}`);
@@ -324,28 +314,27 @@ const invokePage = (href, pushState, fireEvents = true) => {
   }, delay);
 };
 
-document.addEventListener('click', e => {
+document.addEventListener('click', (e) => {
   if (e.target && e.target.classList.contains('navigate')) {
     e.preventDefault();
-    const href = cleanPaths(e.target.dataset.href);  
+    const href = cleanPaths(e.target.dataset.href);
     invokePage(href, true);
   }
 });
 
 const contentOnLoad = (target, fireEvents) => {
   const {
-    pathname
+    pathname,
   } = target.location;
   const href = cleanPaths(pathname);
   invokePage(href, false, fireEvents);
 };
 
-
 window.addEventListener('popstate', ({
-  target
+  target,
 }) => contentOnLoad(target, true));
 window.addEventListener('load', ({
-  target
+  target,
 }) => contentOnLoad(target, false));
 
 document.addEventListener('PageInvokeStart', () => {
