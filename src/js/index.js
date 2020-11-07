@@ -1,12 +1,13 @@
 import '../scss/styles.scss';
 import lottie from 'lottie-web-light';
 /**
- * These three small packages are written by me,
+ * These four small packages are written by me,
  * specifically for this project
  */
 import ScrollSniffer from 'scroll-sniffer';
 import TinyCarousel from './tiny-carousel';
 import Vidya from './vidya';
+import SlinkyCursor from './slinky-cursor';
 /** ------------------------------------ */
 
 const contentSection = document.querySelector('#content');
@@ -14,6 +15,12 @@ let portrait; let portraitBackground; let carousels; let
   vidyas;
 
 const isTouchDevice = () => 'ontouchstart' in window;
+
+if (!isTouchDevice()) {
+  const slinky = new SlinkyCursor();
+  slinky.init();
+  document.body.classList.add('hide-cursor');
+}
 
 const navs = document.querySelectorAll('.navigate');
 

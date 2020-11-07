@@ -21,16 +21,16 @@
     <main class="flex flex-col lg:flex-row h-screen max-w-full"> 
         
         <div class="sidebar">
-            <a href="/" data-href="home" class="navigate h-12 w-12 rounded-full flex justify-center items-center">
+            <a data-cursor href="/" data-href="home" class="navigate h-12 w-12 rounded-full flex justify-center items-center">
                 <img class="w-full h-full" src="/assets/k-logo.svg" alt="Kyle Wetton">
             </a>
             <ul class="text-white flex lg:block nav">
-                <li class="flex justify-center"><a href="/projects" data-href="projects" class="navigate transition-colors duration-200 text-xs writing-lr">Projects</a></li>
-                <li class="flex justify-center"><a href="/about-me" data-href="about-me" class="navigate transition-colors duration-200 text-xs writing-lr mx-8 lg:mx-0 lg:my-8">About me</a></li>
-                <li class="flex justify-center"><a href="#" id="js-toggle-contact" class="text-xs writing-lr">Contact me</a></li>
+                <li class="flex justify-center"><a data-cursor href="/projects" data-href="projects" class="navigate transition-colors duration-200 text-xs writing-lr">Projects</a></li>
+                <li class="flex justify-center"><a data-cursor href="/about-me" data-href="about-me" class="navigate transition-colors duration-200 text-xs writing-lr mx-8 lg:mx-0 lg:my-8">About me</a></li>
+                <li class="flex justify-center"><a data-cursor href="#" id="js-toggle-contact" class="text-xs writing-lr">Contact me</a></li>
             </ul>
             <div>
-                <a href="https://github.com/kylewetton?tab=repositories&q=&type=public&language=javascript" target="_blank" rel="noreferrer">
+                <a data-cursor href="https://github.com/kylewetton?tab=repositories&q=&type=public&language=javascript" target="_blank" rel="noreferrer">
                     <span class="jam jam-github-circle text-gray-500 text-3xl hover:text-gold transition duration-200"></span>
                 </a>
 
@@ -44,7 +44,7 @@
     <div id="js-contact" class="contact overflow-hidden off-canvas z-50">
         <div class="flex items-center justify-between text-xs md:text-sm leading-none bg-charcoal-900 p-2 rounded-t-sm">
             <p class="text-white">Contact me via phone or email 👋</p>
-            <p class="flex items-center text-blue-500"><span class="jam jam-phone"></span> <a href="tel:021733682" class="font-bold">021 733 682</a></p>
+            <p class="flex items-center text-blue-500"><span class="jam jam-phone"></span> <a data-cursor href="tel:021733682" class="font-bold">021 733 682</a></p>
         </div>
         
         <form action="/" method="POST" id="formPackage" class="form flex flex-col">
@@ -54,8 +54,8 @@
             </div>
             <textarea placeholder="What would you like to talk about?" id="fmessage" name="message"></textarea>
             <div class="contact-controls space-x-2">
-                <button id="js-close-contact" class="close-contact control-button">close</button>
-                <button id="js-send-mail" class="submit-button control-button" type="submit"><span class="jam text-xs mr-1 icon"></span><span class="visually-hidden">Send email</span></button>
+                <button data-cursor id="js-close-contact" class="close-contact control-button">close</button>
+                <button data-cursor id="js-send-mail" class="submit-button control-button" type="submit"><span class="jam text-xs mr-1 icon"></span><span class="visually-hidden">Send email</span></button>
             </div>
             
         </form>    
