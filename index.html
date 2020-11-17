@@ -30,8 +30,8 @@
                 <li class="flex justify-center"><a data-cursor href="#" id="js-toggle-contact" class="text-xs writing-lr">Contact me</a></li>
             </ul>
             <div>
-                <a data-cursor href="https://github.com/kylewetton?tab=repositories&q=&type=public&language=javascript" target="_blank" rel="noreferrer">
-                    <span class="jam jam-github-circle text-gray-500 text-3xl hover:text-gold transition duration-200"></span>
+                <a href="https://github.com/kylewetton?tab=repositories&q=&type=public&language=javascript" target="_blank" rel="noreferrer">
+                    <span data-cursor class="jam jam-github-circle text-gray-500 text-3xl hover:text-gold transition duration-200"></span>
                 </a>
 
             </div>
@@ -49,10 +49,10 @@
         
         <form action="/" method="POST" id="formPackage" class="form flex flex-col">
             <div class="flex border-b border-charcoal-900">
-                <input placeholder="Name" class="flex-1 border-r border-charcoal-900" id="fname" type="text" name="name">
-                <input placeholder="Email" class="flex-1" id="femail" type="email" name="email">
+                <input data-cursorhide placeholder="Name" class="flex-1 border-r bg-gray-200 border-charcoal-900" id="fname" type="text" name="name">
+                <input data-cursorhide placeholder="Email" class="flex-1 bg-gray-200" id="femail" type="email" name="email">
             </div>
-            <textarea placeholder="What would you like to talk about?" id="fmessage" name="message"></textarea>
+            <textarea data-cursorhide class="bg-gray-200" placeholder="What would you like to talk about?" id="fmessage" name="message"></textarea>
             <div class="contact-controls space-x-2">
                 <button data-cursor id="js-close-contact" class="close-contact control-button">close</button>
                 <button data-cursor id="js-send-mail" class="submit-button control-button" type="submit"><span class="jam text-xs mr-1 icon"></span><span class="visually-hidden">Send email</span></button>

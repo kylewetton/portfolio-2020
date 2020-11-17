@@ -7,7 +7,7 @@
     "build": "NODE_ENV=production webpack --config webpack/webpack.prod.js  --colors",
     "start": "NODE_ENV=development webpack --watch --open --config webpack/webpack.dev.js",
     "serve": "node server.js",
-    "serve-watch": "PORT=9000 nodemon server.js",
+    "serve:watch": "PORT=6090 nodemon server.js",
     "clean": "./node_modules/.bin/eslint --fix . --ext .js src"
   },
   "keywords": [],

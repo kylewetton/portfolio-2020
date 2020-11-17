@@ -259,6 +259,14 @@ input[type="submit"] {
     }
 }
 
+.cursor-dot.cursor-hidden, .cursor-pest.cursor-hidden {
+    @apply hidden;
+}
+
+input, textarea {
+    cursor: default !important;
+}
+
 
 .brand-logo {
     @apply transition-opacity duration-700;

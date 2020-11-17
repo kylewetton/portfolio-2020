@@ -1,361 +1,315 @@
-import '../scss/styles.scss';
-import lottie from 'lottie-web-light';
-/**
- * These four small packages are written by me,
- * specifically for this project
- */
-import ScrollSniffer from 'scroll-sniffer';
-import TinyCarousel from './tiny-carousel';
-import Vidya from './vidya';
-import SlinkyCursor from './slinky-cursor';
-/** ------------------------------------ */
-
-const contentSection = document.querySelector('#content');
-let portrait; let portraitBackground; let carousels; let
-  vidyas;
-
-const isTouchDevice = () => 'ontouchstart' in window;
-
-if (!isTouchDevice()) {
-  const slinky = new SlinkyCursor();
-  slinky.init();
-  document.body.classList.add('hide-cursor');
-}
-
-const navs = document.querySelectorAll('.navigate');
-
-const highlightNav = () => {
-  const page = window.location.pathname.split('/')[1];
-  navs.forEach((n) => {
-    const { href } = n.dataset;
-    n.classList.remove('text-gold');
-    if (href && href === page) {
-      n.classList.add('text-gold');
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+define(["require", "exports", "lottie-web-light", "scroll-sniffer", "./libs", "./utils", "../scss/styles.scss"], function (require, exports, lottie_web_light_1, scroll_sniffer_1, libs_1, utils_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    lottie_web_light_1 = __importDefault(lottie_web_light_1);
+    scroll_sniffer_1 = __importDefault(scroll_sniffer_1);
+    /** ------------------------------------ */
+    var contentSection = document.querySelector('#content');
+    var portrait;
+    var portraitBackground;
+    var carousels;
+    var vidyas;
+    var isTouchDevice = function () { return 'ontouchstart' in window; };
+    if (!isTouchDevice()) {
+        var slinky = new libs_1.SlinkyCursor({
+            size: 31,
+            growSize: 31 * 2.5,
+            laziness: 5,
+            stiffness: 2.5,
+        });
+        slinky.init();
+        document.body.classList.add('hide-cursor');
     }
-  });
-};
-
-function init() {
-  portrait = document.querySelector('#js-portrait');
-  portraitBackground = document.querySelector('#js-portrait-background');
-
-  /**
-   * Tiny Carousel
-   * */
-
-  carousels = [...document.querySelectorAll('.image-carousel')].map((carousel) => new TinyCarousel(carousel));
-  vidyas = [...document.querySelectorAll('.vidya')].map((vid) => new Vidya(vid));
-
-  /**
-   * ScrollSniffer
-   */
-  const listener = new ScrollSniffer('.listen');
-  listener.listen();
-
-  highlightNav();
-
-  /**
-   * Toggle device text
-   */
-
-  const mobileText = document.querySelectorAll('.mobile');
-  const desktopText = document.querySelectorAll('.desktop');
-
-  if (isTouchDevice()) {
-    mobileText.forEach((el) => {
-      el.classList.remove('hidden');
-    });
-  } else {
-    desktopText.forEach((el) => {
-      el.classList.remove('hidden');
-    });
-  }
-
-  /**
-    * Fade logos in
-    */
-
-  const brandLogos = document.querySelectorAll('.brand-logo');
-
-  if (brandLogos.length) {
-    brandLogos.forEach((logo, index) => {
-      logo.addEventListener('load', () => {
-        const i = index + 1;
-        setTimeout(() => {
-          logo.classList.remove('opacity-0');
-        }, i * 100);
-      });
-    });
-  }
-} // End init
-
-/**
- * Portrait Parallaxing effect
- */
-
-const calculateCenterAngle = (x, y) => {
-  const client = document.body.getBoundingClientRect();
-  const centerX = client.width / 2;
-  const centerY = client.height / 2;
-  const angleX = Math.floor(100 - (x / centerX * 100));
-  const angleY = Math.floor(100 - (y / centerY * 100));
-  return {
-    angleX,
-    angleY,
-  };
-};
-
-const portraitParallax = (x, y) => {
-  const angleTension = 80;
-  const {
-    angleX,
-    angleY,
-  } = calculateCenterAngle(x, y);
-  portrait.style.backgroundPosition = `${50 - ((angleX / (angleTension / 2)) * -1)}%`;
-  portrait.style.transform = `translateY(${(angleY / (angleTension / 4)) * -1}px) scale(1.01)`;
-  portraitBackground.style.cssText = `transform: perspective(400px)
-    rotateX(${angleY / (angleTension * 3)}deg)
-    rotateY(${(angleX / (angleTension * 3)) * -1}deg)
-    scale(1.02);`;
-};
-
-window.addEventListener('mousemove',
-  ({
-    clientX,
-    clientY,
-  }) => {
-    if (portrait && portraitBackground && !isTouchDevice()) {
-      portraitParallax(clientX, clientY);
-    }
-  });
-
-/**
- * Mail
- */
-
-const contactContainer = document.querySelector('#js-contact');
-const toggleContactButton = document.querySelector('#js-toggle-contact');
-const closeContact = document.querySelector('#js-close-contact');
-const mailButton = document.querySelector('#js-send-mail');
-
-const toggleContactContainer = () => {
-  contactContainer.classList.toggle('off-canvas');
-};
-
-mailButton.addEventListener('click', (e) => sendMail(e));
-
-toggleContactButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  toggleContactContainer();
-});
-
-closeContact.addEventListener('click', (e) => {
-  e.preventDefault();
-  toggleContactContainer();
-});
-
-const fields = {
-  fname: document.querySelector('#fname'),
-  femail: document.querySelector('#femail'),
-  fmessage: document.querySelector('#fmessage'),
-};
-
-for (const [key, field] of Object.entries(fields)) {
-  field.addEventListener('click', () => {
-    // Remove any error classes when it's highlighted
-    field.classList.remove('error');
-  });
-}
-
-const updateFormState = (state = '', revert = false) => {
-  const clear = () => {
-    mailButton.classList.remove('sent');
-    mailButton.classList.remove('sending');
-    mailButton.classList.remove('failed');
-  };
-  clear();
-
-  switch (state) {
-    case 'sending':
-      mailButton.classList.add('sending');
-      break;
-    case 'sent':
-      mailButton.classList.add('sent');
-      break;
-    case 'failed':
-      mailButton.classList.add('failed');
-      break;
-    case 'server-error':
-      mailButton.classList.add('server-error');
-      break;
-    default:
-      clear();
-  }
-
-  if (revert) {
-    /**
-     * Revert back to default state after 2 seconds
-     */
-    setTimeout(() => updateFormState(), 2000);
-  }
-};
-
-const mailSuccess = () => {
-  updateFormState('sent', true);
-  setTimeout(() => {
-    toggleContactContainer();
-    for (const [key, field] of Object.entries(fields)) {
-      field.value = '';
-    }
-  }, 1000);
-};
-
-const highlightBadFields = ({ errors }) => {
-  errors.forEach((error) => {
-    const { param } = error;
-    fields[param].classList.add('error');
-  });
-};
-
-const sendMail = (e) => {
-  e.preventDefault();
-
-  updateFormState('sending');
-
-  const formData = new FormData();
-  formData.append('fname', fields.fname.value);
-  formData.append('femail', fields.femail.value);
-  formData.append('fmessage', fields.fmessage.value);
-
-  const object = {};
-  formData.forEach((value, key) => {
-    object[key] = value;
-  });
-  const json = JSON.stringify(object);
-
-  fetch('send-mail', {
-    method: 'post',
-    mode: 'cors',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: json,
-  })
-    .then((res) => {
-      if (res.ok) {
-        mailSuccess();
-      } else if (res.status === 503) {
-        updateFormState('server-error', false);
-      } else {
-        updateFormState('failed', true);
-      }
-      return res;
-    })
-    .then((res) => res.json())
-    .then((res) => {
-      if (res.errors.length) {
-        highlightBadFields(res);
-      }
-    })
-    .catch(console.error);
-};
-
-/**
- * Page Transitions
- */
-
-const animatedPanel = document.querySelector('#js-animated-panel');
-const animations = ['fill', 'blob', 'stripes'];
-const animSpeed = 1000;
-let cycle = 0;
-
-const tracks = animations.map((anim, i) => {
-  const trackPanel = document.querySelector(`#anim-${i}`);
-  return {
-    panel: trackPanel,
-    animation: lottie.loadAnimation({
-      container: trackPanel,
-      renderer: 'svg',
-      rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice',
-      },
-      autoplay: false,
-      loop: false,
-      path: `/assets/${anim}.json`,
-    }),
-  };
-});
-
-const playAnimation = () => {
-  tracks.forEach((track) => track.panel.classList.add('hidden'));
-
-  tracks[cycle].panel.classList.remove('hidden');
-  tracks[cycle].animation.goToAndPlay(0, true);
-  cycle = cycle < tracks.length - 1 ? cycle + 1 : 0;
-};
-
-/**
- * Routing
- */
-
-const cleanPaths = (path) => path.split('/').filter((p) => p !== '').join('/');
-
-const invokePage = (href, pushState, fireEvents = true) => {
-  if (fireEvents) document.dispatchEvent(new Event('PageInvokeStart'));
-  const delay = fireEvents ? animSpeed : 0;
-
-  setTimeout(() => {
-    fetch(`/invoke/${href || 'home'}`)
-      .then((res) => res.text())
-      .then((html) => {
-        contentSection.innerHTML = html;
-        if (pushState) {
-          window.history.pushState({}, href, `${window.location.origin}/${href && href !== 'home' ? href : ''}`);
+    var navs = document.querySelectorAll('.navigate');
+    function init() {
+        portrait = document.querySelector('#js-portrait');
+        portraitBackground = document.querySelector('#js-portrait-background');
+        /**
+         * Tiny Carousel
+         * */
+        var carouselNodes = document.querySelectorAll('.image-carousel');
+        var vidyasNodes = document.querySelectorAll('.vidya');
+        carousels = Array.from(carouselNodes).map(function (carousel) { return new libs_1.TinyCarousel(carousel); });
+        vidyas = Array.from(vidyasNodes).map(function (vid) { return new libs_1.Vidya(vid); });
+        /**
+         * ScrollSniffer
+         */
+        var listener = new scroll_sniffer_1.default('.listen');
+        listener.listen();
+        utils_1.highlightNav(navs);
+        /**
+         * Toggle device text
+         */
+        var mobileText = document.querySelectorAll('.mobile');
+        var desktopText = document.querySelectorAll('.desktop');
+        if (isTouchDevice()) {
+            mobileText.forEach(function (el) {
+                el.classList.remove('hidden');
+            });
         }
-      })
-      .then(() => {
-        window.scrollTo(0, 0);
-        init();
-        if (fireEvents) document.dispatchEvent(new Event('PageInvokeEnd'));
-      });
-  }, delay);
-};
-
-document.addEventListener('click', (e) => {
-  if (e.target && e.target.classList.contains('navigate')) {
-    e.preventDefault();
-    const href = cleanPaths(e.target.dataset.href);
-    invokePage(href, true);
-  }
-});
-
-const contentOnLoad = (target, fireEvents) => {
-  const {
-    pathname,
-  } = target.location;
-  const href = cleanPaths(pathname);
-  invokePage(href, false, fireEvents);
-};
-
-window.addEventListener('popstate', ({
-  target,
-}) => contentOnLoad(target, true));
-window.addEventListener('load', ({
-  target,
-}) => contentOnLoad(target, false));
-
-document.addEventListener('PageInvokeStart', () => {
-  animatedPanel.classList.add('loading');
-  playAnimation();
-  setTimeout(() => {
-    contentSection.classList.remove('loaded');
-  }, animSpeed - 100);
-});
-
-document.addEventListener('PageInvokeEnd', () => {
-  // Delay for animation
-  setTimeout(() => {
-    animatedPanel.classList.remove('loading');
-    contentSection.classList.add('loaded');
-  }, 10);
+        else {
+            desktopText.forEach(function (el) {
+                el.classList.remove('hidden');
+            });
+        }
+        /**
+          * Fade logos in
+          */
+        var brandLogos = document.querySelectorAll('.brand-logo');
+        if (brandLogos.length) {
+            brandLogos.forEach(function (logo, index) {
+                logo.addEventListener('load', function () {
+                    var i = index + 1;
+                    setTimeout(function () {
+                        logo.classList.remove('opacity-0');
+                    }, i * 100);
+                });
+            });
+        }
+    } // End init
+    /**
+     * Portrait Parallaxing effect
+     */
+    var portraitParallax = function (_a) {
+        var x = _a.x, y = _a.y;
+        var angleTension = 80;
+        var _b = utils_1.calculateCenterAngle({ x: x, y: y }), angleX = _b.x, angleY = _b.y;
+        portrait.style.backgroundPosition = 50 - ((angleX / (angleTension / 2)) * -1) + "%";
+        portrait.style.transform = "translateY(" + (angleY / (angleTension / 4)) * -1 + "px) scale(1.01)";
+        portraitBackground.style.cssText = "transform: perspective(400px)\n    rotateX(" + angleY / (angleTension * 3) + "deg)\n    rotateY(" + (angleX / (angleTension * 3)) * -1 + "deg)\n    scale(1.02);";
+    };
+    window.addEventListener('mousemove', function (_a) {
+        var clientX = _a.clientX, clientY = _a.clientY;
+        if (portrait && portraitBackground && !isTouchDevice()) {
+            portraitParallax({ x: clientX, y: clientY });
+        }
+    });
+    /**
+     * Mail
+     */
+    var contactContainer = document.querySelector('#js-contact');
+    var toggleContactButton = document.querySelector('#js-toggle-contact');
+    var closeContact = document.querySelector('#js-close-contact');
+    var mailButton = document.querySelector('#js-send-mail');
+    var toggleContactContainer = function () {
+        contactContainer.classList.toggle('off-canvas');
+    };
+    mailButton.addEventListener('click', function (e) { return sendMail(e); });
+    toggleContactButton.addEventListener('click', function (e) {
+        e.preventDefault();
+        toggleContactContainer();
+    });
+    closeContact.addEventListener('click', function (e) {
+        e.preventDefault();
+        toggleContactContainer();
+    });
+    var fields = {
+        fname: document.querySelector('#fname'),
+        femail: document.querySelector('#femail'),
+        fmessage: document.querySelector('#fmessage'),
+    };
+    var _loop_1 = function (key, field) {
+        if (field) {
+            field.addEventListener('click', function () {
+                field.classList.remove('error');
+            });
+        }
+    };
+    for (var _i = 0, _a = Object.entries(fields); _i < _a.length; _i++) {
+        var _b = _a[_i], key = _b[0], field = _b[1];
+        _loop_1(key, field);
+    }
+    var updateFormState = function (state, revert) {
+        if (state === void 0) { state = ''; }
+        if (revert === void 0) { revert = false; }
+        var clear = function () {
+            mailButton.classList.remove('sent');
+            mailButton.classList.remove('sending');
+            mailButton.classList.remove('failed');
+        };
+        clear();
+        switch (state) {
+            case 'sending':
+                mailButton.classList.add('sending');
+                break;
+            case 'sent':
+                mailButton.classList.add('sent');
+                break;
+            case 'failed':
+                mailButton.classList.add('failed');
+                break;
+            case 'server-error':
+                mailButton.classList.add('server-error');
+                break;
+            default:
+                clear();
+        }
+        if (revert) {
+            /**
+             * Revert back to default state after 2 seconds
+             */
+            setTimeout(function () { return updateFormState(); }, 2000);
+        }
+    };
+    var mailSuccess = function () {
+        updateFormState('sent', true);
+        setTimeout(function () {
+            toggleContactContainer();
+            for (var _i = 0, _a = Object.entries(fields); _i < _a.length; _i++) {
+                var _b = _a[_i], key = _b[0], field = _b[1];
+                if (field) {
+                    field.value = '';
+                }
+            }
+        }, 1000);
+    };
+    var highlightBadFields = function (_a) {
+        var errors = _a.errors;
+        errors.forEach(function (error) {
+            console.log(error);
+            var param = error.param;
+            fields[param].classList.add('error');
+        });
+    };
+    var sendMail = function (e) {
+        e.preventDefault();
+        updateFormState('sending');
+        var formData = new FormData();
+        fields.fname && formData.append('fname', fields.fname.value);
+        fields.femail && formData.append('femail', fields.femail.value);
+        fields.fmessage && formData.append('fmessage', fields.fmessage.value);
+        var object = {
+            fname: '',
+            femail: '',
+            fmessage: '',
+        };
+        formData.forEach(function (value, key) {
+            object[key] = value;
+        });
+        var json = JSON.stringify(object);
+        fetch('send-mail', {
+            method: 'post',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: json,
+        })
+            .then(function (res) {
+            if (res.ok) {
+                mailSuccess();
+            }
+            else if (res.status === 503) {
+                updateFormState('server-error', false);
+            }
+            else {
+                updateFormState('failed', true);
+            }
+            return res;
+        })
+            .then(function (res) { return res.json(); })
+            .then(function (res) {
+            if (res.hasOwnProperty('errors') && res.errors.length) {
+                highlightBadFields(res);
+            }
+        })
+            .catch(console.error);
+    };
+    /**
+     * Page Transitions
+     */
+    var animatedPanel = document.querySelector('#js-animated-panel');
+    var animations = ['fill', 'blob', 'stripes'];
+    var animSpeed = 1000;
+    var cycle = 0;
+    var tracks = animations.map(function (anim, i) {
+        var trackPanel = document.querySelector("#anim-" + i);
+        return {
+            panel: trackPanel,
+            animation: lottie_web_light_1.default.loadAnimation({
+                container: trackPanel,
+                renderer: 'svg',
+                rendererSettings: {
+                    preserveAspectRatio: 'xMidYMid slice',
+                },
+                autoplay: false,
+                loop: false,
+                path: "/assets/" + anim + ".json",
+            }),
+        };
+    });
+    var playAnimation = function (tracks) {
+        if (!tracks.length)
+            return;
+        tracks.forEach(function (track) { return track.panel.classList.add('hidden'); });
+        tracks[cycle].panel.classList.remove('hidden');
+        tracks[cycle].animation.goToAndPlay(0, true);
+        cycle = cycle < tracks.length - 1 ? cycle + 1 : 0;
+    };
+    /**
+     * Routing
+     */
+    var cleanPaths = function (path) { return path.split('/').filter(function (p) { return p !== ''; }).join('/'); };
+    var invokePage = function (href, pushState, fireEvents) {
+        if (fireEvents === void 0) { fireEvents = true; }
+        if (fireEvents)
+            document.dispatchEvent(new Event('PageInvokeStart'));
+        var delay = fireEvents ? animSpeed : 0;
+        setTimeout(function () {
+            fetch("/invoke/" + (href || 'home'))
+                .then(function (res) { return res.text(); })
+                .then(function (html) {
+                contentSection.innerHTML = html;
+                if (pushState) {
+                    window.history.pushState({}, href, window.location.origin + "/" + (href && href !== 'home' ? href : ''));
+                }
+            })
+                .then(function () {
+                window.scrollTo(0, 0);
+                init();
+                if (fireEvents)
+                    document.dispatchEvent(new Event('PageInvokeEnd'));
+            });
+        }, delay);
+    };
+    document.addEventListener('click', function (e) {
+        var target = e.target;
+        if (target && target.classList.contains('navigate')) {
+            e.preventDefault();
+            var href = target.dataset.href && cleanPaths(target.dataset.href);
+            if (typeof href === 'string') {
+                invokePage(href, true);
+            }
+        }
+    });
+    var contentOnLoad = function (target, fireEvents) {
+        var pathname = target.location.pathname;
+        var href = cleanPaths(pathname);
+        invokePage(href, false, fireEvents);
+    };
+    window.addEventListener('popstate', function (_a) {
+        var target = _a.target;
+        return contentOnLoad(target, true);
+    });
+    window.addEventListener('load', function (_a) {
+        var target = _a.target;
+        return contentOnLoad(target, false);
+    });
+    document.addEventListener('PageInvokeStart', function () {
+        animatedPanel && animatedPanel.classList.add('loading');
+        playAnimation(tracks);
+        setTimeout(function () {
+            contentSection.classList.remove('loaded');
+        }, animSpeed - 100);
+    });
+    document.addEventListener('PageInvokeEnd', function () {
+        // Delay for animation
+        setTimeout(function () {
+            animatedPanel && animatedPanel.classList.remove('loading');
+            contentSection.classList.add('loaded');
+        }, 10);
+    });
 });
